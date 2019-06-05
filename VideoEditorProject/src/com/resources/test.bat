@@ -1,0 +1,6 @@
+@ECHO off 
+cmd /c start src\com\resources\ffmpeg -i G:\MyWorkspace\ffmpeg-4.1.3-win64-static\ffmpeg-4.1.3-win64-static\bin\1.MOV -ss 00:00:05 -t 00:00:10 -vcodec copy -acodec copy G:\MyWorkspace\ffmpeg-4.1.3-win64-static\ffmpeg-4.1.3-win64-static\bin\2.MOV 
+ src\com\resources\ffmpeg -i G:\MyWorkspace\ffmpeg-4.1.3-win64-static\ffmpeg-4.1.3-win64-static\bin\1.MOV -ss 00:00:20 -t 00:00:10 -vcodec copy -acodec copy G:\MyWorkspace\ffmpeg-4.1.3-win64-static\ffmpeg-4.1.3-win64-static\bin\3.MOV 
+ src\com\resources\ffmpeg -f concat -safe 0 -i src\com\resources\list.txt -c copy G:\MyWorkspace\ffmpeg-4.1.3-win64-static\ffmpeg-4.1.3-win64-static\bin\output-final.MOV 
+ src\com\resources\ffmpeg -i G:\MyWorkspace\ffmpeg-4.1.3-win64-static\ffmpeg-4.1.3-win64-static\bin\output-final.MOV G:\\MyWorkspace\\ffmpeg-4.1.3-win64-static\\ffmpeg-4.1.3-win64-static\\bin\\output-final.mp4 
+ src\com\resources\ffmpeg -f concat -safe 0 -i src\com\resources\list2.txt -c copy G:\MyWorkspace\ffmpeg-4.1.3-win64-static\ffmpeg-4.1.3-win64-static\bin\final.mp4
