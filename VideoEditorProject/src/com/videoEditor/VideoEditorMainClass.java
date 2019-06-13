@@ -2,36 +2,36 @@ package com.videoEditor;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+import org.apache.commons.io.FilenameUtils;
 
 public class VideoEditorMainClass {
 
+	static String[] extentionArray = { "mp4", "avi", "mkv" };
+	static List<String> extentionsList = Arrays.asList(extentionArray);
+	static String command = "";
+	static int counter = 1;
+
 	public static void main(String[] args) {
 		try {
+			File main = new File("E:\\himym\\All");
+			
+			listFiles(main);
+			System.out.println(command);
+			File file = new File("src\\com\\resources\\output.bat");
 
-			String ExecCommand = "cmd /c start src\\com\\resources\\ffmpeg -i G:\\MyWorkspace\\ffmpeg-4.1.3-win64-static\\ffmpeg-4.1.3-win64-static\\bin\\1.MOV -ss 00:00:05 -t 00:00:10 -vcodec copy -acodec copy G:\\MyWorkspace\\ffmpeg-4.1.3-win64-static\\ffmpeg-4.1.3-win64-static\\bin\\2.MOV"
-					+ " \n "
-					+ "src\\com\\resources\\ffmpeg -i G:\\MyWorkspace\\ffmpeg-4.1.3-win64-static\\ffmpeg-4.1.3-win64-static\\bin\\1.MOV -ss 00:00:20 -t 00:00:10 -vcodec copy -acodec copy G:\\MyWorkspace\\ffmpeg-4.1.3-win64-static\\ffmpeg-4.1.3-win64-static\\bin\\3.MOV"
-					+ " \n " +
+			file.createNewFile();
+			FileWriter fw = new FileWriter("src\\com\\resources\\output.bat");
+			fw.append("@ECHO off \n");
+			fw.append(command);
+			fw.close();
 
-					"src\\com\\resources\\ffmpeg -f concat -safe 0 -i src\\com\\resources\\list.txt -c copy G:\\MyWorkspace\\ffmpeg-4.1.3-win64-static\\ffmpeg-4.1.3-win64-static\\bin\\output-final.MOV"
-					+ " \n "
-					+ "src\\com\\resources\\ffmpeg -i G:\\MyWorkspace\\ffmpeg-4.1.3-win64-static\\ffmpeg-4.1.3-win64-static\\bin\\output-final.MOV G:\\\\MyWorkspace\\\\ffmpeg-4.1.3-win64-static\\\\ffmpeg-4.1.3-win64-static\\\\bin\\\\output-final.mp4"
-					+ " \n "
-
-					+ "src\\com\\resources\\ffmpeg -f concat -safe 0 -i src\\com\\resources\\list2.txt -c copy G:\\MyWorkspace\\ffmpeg-4.1.3-win64-static\\ffmpeg-4.1.3-win64-static\\bin\\final.mp4";
-
-			System.out.println(ExecCommand);
-
-			File file = new File("src\\com\\resources\\test.bat");
-			if (file.length() == 0) {
-				file.createNewFile();
-				FileWriter fw = new FileWriter("src\\com\\resources\\test.bat");
-				fw.append("@ECHO off \n");
-				fw.append(ExecCommand);
-				fw.close();
-			}
-
+			
 			Process p = Runtime.getRuntime().exec(file.getPath());
+			
 
 		} catch (Exception e) {
 			System.out.println("HEY Buddy ! U r Doing Something Wrong ");
@@ -40,4 +40,36 @@ public class VideoEditorMainClass {
 		// Enter data using BufferReader
 
 	}
+
+	public static void listFiles(File file) {
+		if (file.isDirectory()) {
+			// System.out.println("*"+file.getName()+"*");
+			File[] innerFileArray = file.listFiles();
+			Arrays.sort(innerFileArray);
+
+			for (File innerFile : Arrays.asList(innerFileArray))
+				listFiles(innerFile);
+		} else {
+			String extension = FilenameUtils.getExtension(file.getName());
+			if (extentionsList.contains(extension.toLowerCase())) {
+				command = command + "src\\com\\resources\\ffmpeg -i " + "\""+file.getAbsolutePath()+"\""
+						+ " -ss";
+				String time = "00:" + generateRandomNumber(3, 20) + ":" + generateRandomNumber(0, 50);
+				command = command + " " + time + " -t 00:00:10 -vcodec copy -acodec copy -pix_fmt yuv420p G:\\outputs\\"
+						+ counter + "." + extension + "\n";
+				counter++;
+
+			}
+		}
+	}
+
+	public static String generateRandomNumber(int low, int high) {
+		Random r = new Random();
+		int result = r.nextInt(high - low) + low;
+		String finalResult = "" + result;
+		if (result < 10)
+			finalResult = "0" + result;
+		return finalResult;
+	}
+
 }
